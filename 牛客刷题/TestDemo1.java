@@ -1,38 +1,35 @@
-package Day3;
+package code;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Stack;
 
+/**
+ * 用两个栈实现队列
+ */
 public class TestDemo1 {
 
-    public boolean chkParenthesis(String A, int n) {
-        //利用栈的特性进行
-        char[] arr = A.toCharArray();
-        Deque<Character> stack = new LinkedList<>();
-        //数组的长度是 arr.length 字符串是str.length()
-        for( int i = 0 ; i < n ;i++ ) {
-            if(arr[i] =='(') {
-                stack.push(arr[i]);
-            }
-            //现在要进行出栈的操作
-            else if( arr[i] == ')' ) {
-                if(!stack.isEmpty())  stack.pop();//栈不为空 且是左括号就放进去
-                else {
-                    return false;
+    public class Solution {
+        Stack<Integer> stack1 = new Stack<Integer>();//作为主栈
+        Stack<Integer> stack2 = new Stack<Integer>();//作为辅助栈
+
+        public void push(int node) { //进栈
+            stack2.push(node);
+        }
+
+        public int pop() {
+            //逻辑漏洞就是 如果我现在正在出栈，然后进来一个元素，我还是把栈2 的取出来
+            //压到栈1 里面，在弹出栈1 的首元素，那栈1 里面原有的元素都会被打乱顺序
+            //然后出栈
+            if(!stack1.isEmpty()){
+                //现在要出栈不能打乱原有的栈的元素顺序
+            }else{
+                //如果栈1 为空的话应该怎么出栈 -- 把栈2 里面元素全部放进去
+                while(!stack2.isEmpty()){
+                    int temp = stack2.pop();
+                    stack1.push(temp);//先把栈2 的元素去处理啊再放到栈1 里面去
                 }
             }
-            /**
-             * 为什么这里不进行else if(!stack.isEmpty()&&arr[i] == ')' ) 的写法
-             */
-//            else if(!stack.isEmpty()&& arr[i] ==  ')' ){
-//                //进来说明栈不空 并且遇到了右括号那么进行出栈操作
-//                stack.pop();
-//                //但是处理不了的逻辑  栈是空的遇到了右括号说明不匹配
-//                //程序要返回false 不然这个逻辑跳过去
-//                // 后面也没有push 东西进去栈空会当成true 处理
-//            }
-
+            return stack1.pop();
         }
-        return stack.isEmpty();
+
     }
 }
