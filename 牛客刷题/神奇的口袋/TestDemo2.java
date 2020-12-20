@@ -13,33 +13,9 @@ public class TestDemo2 {
      * @return
      */
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int [] arr = new int[n];
-        //把各种想要的物品的体积放到一个数组里面
-        for(int i = 0 ;i < n; i++) {
-            arr[i] = sc.nextInt();
-        }
-
-        public static int count(int i,int sum,int[]arr) {
-            if(sum==0) return 1;
-            if(i==n||sum<0) return 0;
-            return count(i+1,sum-arr[i],arr)+count(i+1,sum,arr);
-        }
-
-        System.out.println(count);
-
-    }
-
-    //采用递归思想
-    //N 代表还剩余的体积数
-    //arr[i] 代表 检索到第i 个物品
-    //返回值代表不同的选择物品的方式的数目。
-
 
 //    本题采用递归思想：
-// ①物品n个，物品体积逐一放入a[100]中
+// ①物品n个，物品体积逐一放入a[30]中
 //②递归函数count(i,sum)=count(i+1,sum-a[i])+count(i+1,sum);
 //    其中，i为第i个物品，sum代表剩余空缺体积数
 //    count(i+1,sum-a[i]) 代表从第i+1个物品开始，剩余体积数为sum-a[i]的方案数
@@ -47,20 +23,30 @@ public class TestDemo2 {
 //    count(i+1,sum) 代表从第i+1个物品开始，剩余体积数为sum的方案数
 //（隐含：不将a[i]的体积计算进去，即不包含a[i]的体积）
 
-    int count(int i,int sum){   //递归函数
-        if(sum==0) return 1;
-        if(i==n||sum<0) return 0;
-        return count(i+1,sum-a[i])+count(i+1,sum);
-    }
-    int main(){
-        while(scanf("%d",&n)!=EOF){
-            for(int i=0;i<n;i++)   scanf("%d",&a[i]);
-            printf("%d",count(0,40));
+    static int [] arr = new int[30];
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();//一共有n个想要的物品
+
+        //把各种想要的物品的体积放到一个数组里面
+        for(int i = 0 ;i < n; i++) {
+            arr[i] = sc.nextInt();
         }
-        return 0;
+        int sum = 40;
+        System.out.println(count(40, 0, n));
+
+
     }
-
-
+    //返回值代表的是组合数字
+    private static int count(int sum,int k,int n) {
+        if(sum == 0) {
+            return 1;  //表示找到了一种组合
+        } // 这两个操作的顺序还不可以交换
+        if(k >= n || sum < 0){
+            return 0 ; //表示这种的组合不满足规则
+        }
+        return count(sum,k+1,n)+count(sum-arr[k],k+1,n);
+    }
 
 }
 
