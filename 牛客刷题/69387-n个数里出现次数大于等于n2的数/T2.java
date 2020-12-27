@@ -13,6 +13,17 @@ public class T2 {
             for (int i = 0; i < arr.length; i++) {
                 arr[i] = Integer.valueOf(strs[i]);
             }
+
+            int count = 0;
+            int num = arr[0]; // 从第一个出现的位置开始计数
+
+
+            // 最简单的方法
+            Arrays.sort(arr);
+            //3 4 6 7 8 9 2 2 2 2 2 2
+            //2 2 2 2 2 2 3 4 6 7 8 9  --  12
+            System.out.println(arr[(arr.length/2)-1]);
+
             //如果用数据结构来写这道题 -- map
             //key 是数组中的每一个元素  value 是出现的次数
             Map<Integer,Integer> map = new TreeMap<>();
@@ -38,20 +49,6 @@ public class T2 {
 
 
 
- /*     int count = 0;
-            int num = arr[0]; // 从第一个出现的位置开始计数
-            //其中有一个整数出现次数大于等于n/2。
-            Arrays.sort(arr);*/
-  /* //3 9 3 2 5 6 7 3 2 3 3 3
-            for (int j = 0; j < arr.length; j++) {
-                if(num == arr[j]){
-                    count++;
-                } else if (count > 0) {
-                count--;
-                } else {
-                    num = arr[j];
-                }
-            }
-            System.out.println(num);*/
+
 
 
