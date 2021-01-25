@@ -26,4 +26,31 @@ public class removeDuplicated {
 
     }
 
+
+    /**
+     * 优化版
+     * 如果数组有序
+     * 0 1 2 3 4 5 还是会把fast 的值再赋值一遍 完全没有必要
+     * 所以加入一个判断
+     */
+
+    public int removeDuplicates2(int[] nums) {
+
+        int slow = 0; // 所有0-slow 之间的数组元素都是不重复的
+
+        for(int fast =0;fast < nums.length;fast++){
+            if(nums[fast] != nums[slow]){
+                if(fast - slow > 1){
+                    //如fast 和 slow的间隔大于1 的话再执行赋值操作
+                    //否则就是原地赋值--没有意义
+                    slow++;
+                    nums[slow] = nums[fast];
+                }
+
+            }
+        }
+        return slow+1;
+
+    }
+
 }
