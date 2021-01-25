@@ -45,8 +45,9 @@ public class removeDuplicated {
                     //否则就是原地赋值--没有意义
                     slow++;
                     nums[slow] = nums[fast];
+                }else{
+                    slow++;
                 }
-
             }
         }
         return slow+1;
