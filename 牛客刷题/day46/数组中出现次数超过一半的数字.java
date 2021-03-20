@@ -11,76 +11,81 @@ public class 数组中出现次数超过一半的数字 {
         System.out.println(MoreThanHalfNum_Solution3(arr));
     }
 
-    //它返回的下表是 表示start
-    //比如以第一个数字作为基准 它返回的就是 index = 1
-    //而我的返回的index = 0
-    public static int MoreThanHalfNum_Solution3(int [] array) {
-        if(array.length<=0)
-            return 0;
+    /**
+     * 其实和下面不一样的地方就是
+     * 还是基于快速排序的思想 只不过是
+     * 如果数组是有序的并且又超过一半的数组，那么排序之后
+     * 数组中间的那个元素就是我们要找的
+     * 现在我们做的是把这个元素找到
+     * 然后左右展开搜索
+     * @param array
+     * @return
+     */
 
-        int start = 0;
-        int length = array.length;
-        int end  = length-1;
-        int middle = length>>1;
-
-        int index = Partition(array,start,end);
-
-
-        while(index!=middle){
-
-            if(index>middle){
-                index = Partition(array,start,index-1);
+    private static int MoreThanHalfNum_Solution3(int[] array) {
+        int half = array.length/2;
+        int index = quickSort2(array,half,0,array.length-1);
+        //然后开始以index 为基准向前检索元素的个数
+        //因为我可以确保index之前的是一定小于等于它的
+        int count = 0;
+        int key  =array[index];
+        count ++;
+        //更换一种搜索的方式
+        int left = index-1;
+        int right = index+1;
+        while (left >= 0){
+            if(array[left] == key){
+                count++;
+                left--;
+            }else {
+                break;
             }
-            else{
-                index = Partition(array,index+1,end);
-            }
-        }
-        int result = array[middle];
 
-        int times = 0;
-        for(int i=0;i<length;++i){
-            if(array[i] == result)
-                times++;
         }
-        if(times*2<length){
-            System.out.println(times);
-            return 0;
-        }else{
-            return result;
-        }
-    }
-    public  static int Partition(int[] array,int start,int end){
-
-        int flag = array[start];
-
-        while(start<end){
-            while(array[end]>flag){
-                end--;
+        while (right <= array.length-1){
+            if(array[right] == key){
+                count++;
+                right++;
+            }else {
+                break;
             }
-            swap(array,start,end);
-            while(array[start]<=flag){
-                start++;
-            }
-            swap(array,start,end);
+
         }
-        return start;
-    }
-    public static void swap(int[] array,int num1,int num2){
-        int temp =array[num1];
-        array[num1] =array[num2];
-        array[num2] =temp;
+        if(count > half ){
+            return key;
+        }
+        return 0;
     }
 
+    private static int quickSort2(int[] array, int half, int left, int right) {
+        //使用hover的挖坑法进行排序
+        int index = partition(array,left,right);
 
+        //要写一个不断递归的过程--这里的递归的过程写的有问题
+        //在你不去判断index之前，这个index之前的值肯定是 <= index的
+        //如果这个index的值刚好等一它之前的值
+        //就会出现问题
+        if(index > half){
+            return quickSort2(array, half, left, index - 1);
+        }else if (index < half) {
+            return  quickSort2(array,half,index+1,right);
+        } else {
+            //可以停止递归
+            return index;
+        }
+    }
 
 
     //基于选择排序的思想
     //把2当作基准
     //比  <= 2的放在前面 >2的放在后面
+    //但是这个写法真的好差劲
+    //因为在index  > half的时候不能盲目的去缩小边界。
     public static int MoreThanHalfNum_Solution2(int [] array) {
         int half = array.length/2;
         int index = quickSort(array,half,0,array.length-1);
         //然后开始以index 为基准向前检索元素的个数
+        //因为我可以确保index之前的是一定小于等于它的
         int count = 0;
         int key  =array[index];
         for(int i = index; i >= 0;i--){
@@ -92,7 +97,6 @@ public class 数组中出现次数超过一半的数字 {
             return array[index];
         }
         return 0;
-
     }
 
     //闭区间
@@ -106,7 +110,20 @@ public class 数组中出现次数超过一半的数字 {
         //就会出现问题
 
         if(index > half){
-            return quickSort(array,half,left,index-1);
+            //这里不能盲目的进行缩小区间的做法
+            //事实上这里就应该开始去检索了
+            int count = 0;
+            int key  =array[index];
+            for(int i = index; i >= 0;i--){
+                if(array[i] == key){
+                    count++;
+                }
+            }
+            if(count > half ){
+                return index;
+            } else{
+                return quickSort(array, half, left, index - 1);
+            }
         }else if (index < half) {
            return  quickSort(array,half,index+1,right);
         } else {
@@ -114,6 +131,7 @@ public class 数组中出现次数超过一半的数字 {
             return index;
         }
     }
+
 
     private static int partition(int[] array, int leftIndex, int rightIndex) {
         int left = leftIndex;
@@ -133,6 +151,11 @@ public class 数组中出现次数超过一半的数字 {
         array[left] = key;
         return left;
     }
+
+
+
+
+
 
 
     //hash解决
