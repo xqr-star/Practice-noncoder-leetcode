@@ -5,6 +5,67 @@ package ListNode;
 //1233445
 //125
 public class deleteDuplication {
+
+    public ListNode deleteDuplicates2(ListNode head) {
+        ListNode fakeHead = new ListNode(-1);
+        ListNode prev = fakeHead; //prev永远指向保留链表的最后一个结点
+        ListNode cur = head; //表示当前遍历的链表结点
+        while(cur != null){
+            if(cur.next == null){ // 表示只有一个元素 或者是最后一个元素是不重复的
+                prev.next = cur;
+                prev = cur;
+                cur = cur.next;
+            }else if(cur.next != null && cur.val != cur.next.val ){
+                prev.next = cur;
+                prev = cur;
+                cur = cur.next;
+            }else{
+                while(cur.next != null && cur.val == cur.next.val){
+                    cur = cur.next;
+                }
+                //需要多跳出一个
+                cur =cur.next;
+            }
+        }
+        prev.next = null;
+        return fakeHead.next;
+    }
+
+    /**
+     * 一个调试无数次的代码
+     * 抛出了很多的空指针异常
+     * 最终终于调试好了
+     *
+    */
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode fakeHead = new ListNode(-1);
+        ListNode cur = fakeHead;
+        ListNode  low = head;
+        ListNode fast = head;
+        if(head == null) return head;
+        while(fast != null && fast.next != null){
+            fast = low.next;
+            if(low.val != fast.val){
+                cur.next = low;
+                cur = low;
+                low = fast;
+            }else{
+                while(fast != null && low.val == fast.val ){
+                    fast = fast.next;
+                }
+                //找到了不相等的那一个元素
+                low = fast;
+            }
+        }
+        if(low != null && low.next == null){
+            cur.next = low;
+            cur = low;
+        }
+        //一定要记得置为空
+        cur.next = null;
+        return fakeHead.next;
+    }
+
     /**
      * 正确解法
      */
