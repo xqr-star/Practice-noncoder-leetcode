@@ -39,7 +39,6 @@ public class lengthOfLIS {
 
         for(int i =0 ;i < length;i++){
 
-
              dp[i] = 1;
             //初始化状态 每一个数最长的子序列都是他们自己 1
             for(int j = 0;j < i;j++){
