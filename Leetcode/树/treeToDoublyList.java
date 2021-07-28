@@ -1,64 +1,56 @@
-package BinaryTree;
+
 
 //剑指 Offer 36. 二叉搜索树与双向链表
+// Definition for a Node.
 
 public class treeToDoublyList {
-
-    /**
-     * 显然是树的前驱用left表示，树的后继用right表示
-     * 二叉搜索树的中序遍历是有序的
-     * 所以转换成链表应该是使用的中序遍历
-     *
-     * @param root
-     * @return
-     */
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(2);
-        TreeNode node = new TreeNode(1);
-        root.left = node;
-        treeToDoublyList(root);
-
-    }
-    public static TreeNode treeToDoublyList(TreeNode root) {
+    Node head;
+    Node prev ;//用来保存遍历到的上一个结点
+    public Node treeToDoublyList(Node root) {
         if(root == null) return null;
-        if(root.left == null && root.right == null) return root;
+        //对树进行中序遍历
+        dfs(root);
 
-        //需要拿到这颗树的中序遍历的第一个节点
-        TreeNode head = inorder(root);
-
-
-        //以及中序遍历的最后一个结点
-        TreeNode tail= toBUild(root);
-        head.left = tail;
-        tail.right = head;
+        //最后只需要对head 头结点和尾结点进行调整即可
+        head.left = prev;
+        prev.right = head;
         return head;
     }
 
-    private static TreeNode inorder(TreeNode root) {
-        if(root == null) return null;
-        if(root.left == null && root.right == null) return  root;
-        return inorder(root.left);
+    private void dfs(Node root) {
+        if(root == null) return;
+        dfs(root.left);
+
+        //最深的递归root 此时是最后一个结点
+        if(prev == null) {
+            head = root;//确定head的指向
+        }else {
+            //当前驱不再是空的时候前驱的right 就可以有指向了
+            prev.right = root;
+        }
+        //将当前的root的左指针指向前驱
+        root.left = prev;
+        //更改前序指向
+        prev = root;
+
+        dfs(root.right);
     }
 
-    private static TreeNode toBUild(TreeNode root) {
-        if(root == null) return null;
-        if (root.left == null && root.right == null) return root;
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
 
-        //如果有右子树的话
+        public Node() {}
 
-        //搜索树的左子树
-        TreeNode rootLeft = toBUild(root.left);
-        rootLeft.right = root;
-        root.left = rootLeft;
-        //树的右子树
-        TreeNode rootRight = toBUild(root.right);
-        rootRight.left = root;
-        root.right = rootRight;
-        //它的右子树里面最大的作为返回值
+        public Node(int _val) {
+            val = _val;
+        }
 
-        //如果只有左子树，那么就返回当前的root
-        //就是一定要确保返回的是当前这棵树里面最大的结点
-
-
-    }
+        public Node(int _val,Node _left,Node _right) {
+            val = _val;
+            left = _left;
+            right = _right;
+        }
+    };
 }
