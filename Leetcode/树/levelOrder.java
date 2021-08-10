@@ -6,6 +6,7 @@ import java.util.Queue;
 
 
 
+//剑指 Offer 32 - I. 从上到下打印二叉树
 //剑指 Offer 32 - II. 从上到下打印二叉树 II
 //剑指 Offer 32 - III. 从上到下打印二叉树 III
 public class levelOrder {
@@ -19,6 +20,33 @@ public class levelOrder {
     }
 
 
+    public int[] levelOrder4(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        List<Integer> res = new LinkedList<>();
+        if(root == null) return new int[0];
+        queue.add(root);
+        while(queue.size() != 0){
+            TreeNode node = queue.remove();
+            res.add(node.val);
+            if(node.left != null){
+                queue.add(node.left);
+            }
+            if(node.right != null){
+                queue.add(node.right);
+            }
+        }
+
+//        int size = res.size();
+//        int[] arr =  res.toArray(new int[size]);
+//        return arr;
+        int[] arr = new int[res.size()];
+        int i = 0;
+        for(int num:res){
+            arr[i++]= num;
+        }
+        return arr;
+
+    }
     public List<List<Integer>> levelOrder2(TreeNode root) {
         List<List<Integer>> res = new LinkedList<>();
         if(root == null) return res;
