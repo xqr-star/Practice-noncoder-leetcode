@@ -1,57 +1,64 @@
-package BinaryTree;
-
 import java.util.LinkedList;
 import java.util.List;
 
 //剑指 Offer 34. 二叉树中和为某一值的路径
-
-/**
- * 前序遍历 + 回溯
- */
+//DFS
 public class pathSum {
-    LinkedList<List<Integer>> res = new LinkedList<>();
-    LinkedList<Integer> list = new LinkedList<>();
+    static List<List<Integer>> res ;
+    static LinkedList<Integer> path;
 
     public static void main(String[] args) {
-        int[] arr = new int[]{1,2,4,6,7};
-        // 创建一个LinkedList，保护Collection中的全部元素。
+        TreeNode root = new TreeNode(5);
+        TreeNode node1 = new TreeNode(4);
+        TreeNode node2 = new TreeNode(8);
+        TreeNode node3 = new TreeNode(11);
+        TreeNode node4 = new TreeNode(4);
+        TreeNode node5 = new TreeNode(7);
+        TreeNode node6 = new TreeNode(2);
+        TreeNode node7 = new TreeNode(5);
+
+        root.left = node1;
+        root.right = node2;
+        node1.left = node3;
+        node2.right = node4;
+        node3.left = node5;
+        node3.right = node6;
+        node4.left = node7;
+        pathSum(root,22);
     }
-    public List<List<Integer>> pathSum(TreeNode root, int target) {
-        recur(root,target);
+    public static List<List<Integer>> pathSum(TreeNode root, int target) {
+        res = new LinkedList<>();
+        path = new LinkedList<>();
+        preOrder(root,target);
         return res;
     }
 
-    private void recur(TreeNode root, int target) {
+    private static void preOrder(TreeNode root, int target) {
+
+
         if(root == null) return;
-        list.add(root.val);
-        target -= root.val;
 
-        //递归退出的条件
-        if(target == 0 && root.left == null && root.right== null){
-            res.add(new LinkedList(list));
-            //res.addAll 是把后面的那个集合里面的所有元素全部添加到list里面
-            //而不是把后面的最为一个整体添加
+        path.add(root.val);
+        target = target-root.val;
+        if(target == 0 && root.left == null && root.right == null){
+            res.add(new LinkedList<>(path));
+            path.removeLast();
+            return;
         }
-        //这里都是在不断的进行递归的过程 也就是前序遍历的过程
-        recur(root.left,target);
-        recur(root.right,target);
-        //这里是在回溯 也就是说当前的这个node 结点执行完以后，直接在记录的路径里面删除这个结点
-        //回退到没有执行它的过程
-        list.removeLast();
-    }
+        if(target < 0){
+            path.removeLast();
+            return;
+        }
+        if(root.left == null && root.right == null) {
+            path.removeLast();
+            return;
+        }
 
-    /**
-     * 对一颗树进行先序遍历
-     */
-    public static  void preOrder(TreeNode root){
-        if(root == null ) return;
-        System.out.println(root.val);
-        if(root.left == null && root.right == null)return;
-        if(root.left != null){
-            preOrder(root.left);
-        }
-        if(root.right != null){
-            preOrder(root.right);
-        }
+
+
+        preOrder(root.left,target);
+        preOrder(root.right,target);
+        //表示当前的这个根左右都处理过了 可以出去了
+        path.removeLast();
     }
 }
