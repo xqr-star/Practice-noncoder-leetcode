@@ -38,17 +38,17 @@ public class pathSum {
 
         if(root == null) return;
 
+        //先判断当前的元素是否可以加入根
+        //但是这样的话没有考虑到负数的情况
         path.add(root.val);
-        target = target-root.val;
+        target -= root.val;
+
         if(target == 0 && root.left == null && root.right == null){
             res.add(new LinkedList<>(path));
             path.removeLast();
             return;
         }
-        if(target < 0){
-            path.removeLast();
-            return;
-        }
+        //遍历完了但是不满足
         if(root.left == null && root.right == null) {
             path.removeLast();
             return;
