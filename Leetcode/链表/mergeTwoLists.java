@@ -1,33 +1,32 @@
-package ListNode;
-
-//21. 合并两个有序链表
+//剑指 Offer 25.合并两个排序链表
 public class mergeTwoLists {
-    /**
-     * 通过定义一个傀儡结点，然后把链表串起来
-     */
-    public ListNode solution(ListNode l1, ListNode l2) {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode fakeHead = new ListNode(-1);
-        ListNode cur = fakeHead;
+        ListNode prev = fakeHead;
         ListNode cur1 = l1;
         ListNode cur2 = l2;
+
         while(cur1 != null && cur2 != null){
-            if(cur1.val <= cur2.val) {
-                cur.next = cur1;
-                cur = cur.next;
-                cur1 = cur1.next;
+            if(cur1.val <= cur2.val){
+                prev.next =cur1;
+                prev = prev.next;
+                cur1 =cur1.next;
             }else{
-                cur.next = cur2;
-                cur = cur.next;
+                prev.next = cur2;
+                prev = prev.next;
                 cur2 = cur2.next;
             }
         }
-        if(cur1 != null){
-            cur.next = cur1;
+        while(cur1 != null){
+            prev.next =cur1;
+            prev = prev.next;
+            cur1 =cur1.next;
         }
-        if(cur2 != null){
-            cur.next = cur2;
+        while(cur2 != null){
+            prev.next = cur2;
+            prev = prev.next;
+            cur2 = cur2.next;
         }
         return fakeHead.next;
-
     }
 }
