@@ -3,36 +3,33 @@ package String;
 //14. 最长公共前缀
 public class longestCommonPrefix {
     public static void main(String[] args) {
-        String[] str = {"flower","flow","flight"};
-        System.out.println(solution1(str));
+        String[] arr = new String[]{"flower","flow","flight"};
+        System.out.println(longestCommonPrefix(arr));
     }
-    public  static String solution1(String[] strs) {
-        //以第一个字符串作为基准参考
-        //然后依次遍历之后的每一个字符串，对公共字符串进行迭代更新操作
-        //两两找出公共的前缀
+    public static String longestCommonPrefix(String[] strs) {
+        //先假设最长的公共前缀是第一个字符串
+        String longest = "";
+        if(strs == null || strs.length == 0) return longest;
+        longest = strs[0];
 
-        //先判定特例
-        if(strs.length == 0){
-            return "";
-        }
-        //假定最长的公共前缀就是第一个字符串
-        String res = strs[0];//str本身就支持subString的操作
-        for(int i = 1; i< strs.length;i++){
-            int j = 0;
-            for(;j < res.length() && j < strs[i].length();j++){
-                //如果相等的话，就把他们尾插进去
-                if(res.charAt(j) != strs[i].charAt(j)){
-                    break;
+        //每一个都和当前的最长公共前缀进行 获取公共字符 然后更新的操作
+        //如果这个之间出现了没有公共前缀的情况 那么返回false
+        for(int i = 1; i < strs.length;i++){
+
+            for(int j = 0; j < longest.length();j++){
+                //找到最长公共的
+                //如果另一个字符串还没有遍历完 并且他们两个还不相同 那么可以更新公共的了
+                if(j < strs[i].length() && longest.charAt(j) != strs[i].charAt(j)){
+                    longest = longest.substring(0,j);
+                }
+                //如果遍历完了短字符串的所有
+                if(j >= strs[i].length()){
+                    longest = longest.substring(0,j);
                 }
             }
-            //由于subString 是new了一个新的对象 所以这里要进行把res 重新赋值的操作 fouze
-            //String的不可改变特性就会被违背
-            res = res.substring(0,j);
-            //如果在这期间出现了 res == null 那么就直接结束
-            if(res .equals("")){
-                return  res;
-            }
+
+            if(longest.equals("")) return "";
         }
-        return res;
+        return longest.toString();
     }
 }
